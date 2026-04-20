@@ -1,0 +1,38 @@
+import validate from "validator";
+import bcrypt from "bcrypt";
+
+//function for email validation
+export function emailValidator(email) {
+  return validate.isEmail(email);
+}
+
+// Validate name
+export function nameValidator(name) {
+  if (!name) {
+    return false;
+  } else {
+    const nameRegex = /^[a-zA-Z\s]{2,30}$/;
+    return nameRegex.test(name);
+  }
+}
+export function passwordValidator(password) {
+  return validate.isStrongPassword(password, {
+    minLength: 6,
+    minLowercase: 1,
+    minUppercase: 1,
+    minNumbers: 1,
+    minSymbols: 1,
+  });
+}
+
+// Password hashing
+export async function hashPassword(password) {
+  const saltRounds = 10; // cost factor
+  const hashed = await bcrypt.hash(password, saltRounds);
+  return hashed;
+}
+
+// Password comparison (for login)
+export async function comparePassword(password, hashedPassword) {
+  return await bcrypt.compare(password, hashedPassword);
+}

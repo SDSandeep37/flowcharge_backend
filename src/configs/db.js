@@ -1,0 +1,23 @@
+import { Pool } from "pg";
+
+// create a connection pool to the database
+
+export const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+});
+
+// table creation if not exist
+export async function initialiseDatabaseTable() {
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS users (
+      id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+      name VARCHAR(100) NOT NULL,
+      email VARCHAR(150) UNIQUE NOT NULL,
+      password VARCHAR(255) NOT NULL,
+      role VARCHAR(10) NOT NULL CHECK (role IN ('admin','owner','consumer')),
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+  `);
+  console.log("Database Tables are Initialised");
+}
