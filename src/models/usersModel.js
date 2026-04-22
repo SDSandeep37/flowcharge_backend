@@ -68,3 +68,26 @@ export async function checkEmailPassword(email, userPassword) {
     throw error;
   }
 }
+
+// get user by id
+export async function getUserById(id) {
+  try {
+    const result = await pool.query(
+      `
+      SELECT * FROM users WHERE id = $1
+      `,
+      [id],
+    );
+    if (result.rowCount === 0) {
+      return false;
+    }
+
+    const user = result.rows[0];
+    delete user.password;
+    delete user.created_at;
+    delete user.updated_at;
+    return user;
+  } catch (error) {
+    throw error;
+  }
+}

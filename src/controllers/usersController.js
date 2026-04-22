@@ -320,3 +320,36 @@ export async function loginController(request, response) {
     });
   }
 }
+
+// Get user by id controller
+export async function getUserByIdContoller(request, response) {
+  let userId = 0;
+  if (request.user) {
+    const { user } = request.user;
+    userId = user;
+  } else {
+    const { id } = request.params;
+    userId = id;
+  }
+
+  try {
+    const userDetails = await User.getUserById(userId);
+    if (!userDetails) {
+      return response.status(400).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+    return response.status(200).json({
+      success: true,
+      user: userDetails,
+    });
+  } catch (error) {
+    console.error(`Error while fetching user details: ${error}`);
+    response.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error: error.message,
+    });
+  }
+}

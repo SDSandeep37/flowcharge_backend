@@ -8,7 +8,7 @@ const app = express();
 // middlewares
 app.use(express.json());
 
-const allowedOrigins = ["http://localhost:3000", "http://10.16.0.240:3000"];
+const allowedOrigins = ["http://localhost:5173"];
 const corsOptions = {
   origin: function (origin, callback) {
     if (!origin || allowedOrigins.includes(origin)) {
