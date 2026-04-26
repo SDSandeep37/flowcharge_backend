@@ -91,3 +91,41 @@ export async function getUserById(id) {
     throw error;
   }
 }
+// get all the owners
+export async function getAllOwners() {
+  try {
+    const result = await pool.query(
+      `
+      SELECT * FROM users WHERE role = 'owner'
+      `,
+    );
+    const owners = result.rows;
+    owners.forEach((owner) => {
+      delete owner.password;
+      delete owner.created_at;
+      delete owner.updated_at;
+    });
+    return owners;
+  } catch (error) {
+    throw error;
+  }
+}
+// get all the consumers
+export async function getAllConsumers() {
+  try {
+    const result = await pool.query(
+      `
+      SELECT * FROM users WHERE role = 'consumer'
+      `,
+    );
+    const consumers = result.rows;
+    consumers.forEach((consumer) => {
+      delete consumer.password;
+      delete consumer.created_at;
+      delete consumer.updated_at;
+    });
+    return consumers;
+  } catch (error) {
+    throw error;
+  }
+}

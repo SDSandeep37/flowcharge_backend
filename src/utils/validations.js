@@ -36,3 +36,12 @@ export async function hashPassword(password) {
 export async function comparePassword(password, hashedPassword) {
   return await bcrypt.compare(password, hashedPassword);
 }
+
+// Validate URL
+export function urlValidator(url) {
+  return validate.isURL(url, {
+    protocols: ["http", "https"], // restrict to http/https
+    require_protocol: true, // must include protocol
+    require_valid_protocol: true, // protocol must be valid
+  });
+}

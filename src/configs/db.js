@@ -19,5 +19,17 @@ export async function initialiseDatabaseTable() {
       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
   `);
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS apis (
+      id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+      owner_id UUID REFERENCES users(id) ON DELETE CASCADE,
+      creator_id UUID REFERENCES users(id) ON DELETE CASCADE,
+      name VARCHAR(100) NOT NULL,
+      description TEXT,
+      base_url VARCHAR(255) NOT NULL,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+  `);
   console.log("Database Tables are Initialised");
 }

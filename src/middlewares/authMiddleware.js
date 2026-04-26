@@ -7,6 +7,7 @@ export function verifyToken(request, response, next) {
   // Check for token in cookies first
   token = getTokenFromCookie(request);
   // console.log(token);
+
   // Fallback to Authorization header if no cookie found
   if (!token) {
     const authHeader = request.headers.authorization;
@@ -18,7 +19,8 @@ export function verifyToken(request, response, next) {
   // Check if token exists
   if (!token) {
     return response.status(401).json({
-      error: "Authorization required",
+      success: false,
+      message: "Authorization required",
     });
   }
 
@@ -27,11 +29,15 @@ export function verifyToken(request, response, next) {
     // console.log(decoded);
     // Attach user data
     request.user = decoded;
-
     next();
   } catch (err) {
+    const message =
+      err.name === "TokenExpiredError"
+        ? "Token expired, please log in again"
+        : "Invalid token";
     return response.status(401).json({
-      error: "Invalid or expired token",
+      message: message,
+      success: false,
     });
   }
 }

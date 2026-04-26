@@ -2,12 +2,13 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import usersRoute from "./routes/usersRoute.js";
+import apisRoute from "./routes/apisRoute.js";
 
 const app = express();
 
 // middlewares
 app.use(express.json());
-
+app.use(cookieParser());
 const allowedOrigins = ["http://localhost:5173"];
 const corsOptions = {
   origin: function (origin, callback) {
@@ -26,4 +27,5 @@ app.use(cors(corsOptions));
 
 //
 app.use("/flowcharge/users", usersRoute);
+app.use("/flowcharge/apis", apisRoute);
 export default app;

@@ -353,3 +353,60 @@ export async function getUserByIdContoller(request, response) {
     });
   }
 }
+
+// get all the owners
+export async function getAllOwnersController(request, response) {
+  try {
+    const owners = await User.getAllOwners();
+    if (!owners || owners.length === 0) {
+      return response.status(400).json({
+        success: false,
+        message: "No owners found",
+      });
+    }
+    return response.status(200).json({
+      success: true,
+      owners: owners,
+    });
+  } catch (error) {
+    console.error(`Error while fetching owners: ${error}`);
+    response.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error: error.message,
+    });
+  }
+}
+// get all the consumers
+export async function getAllConsumersController(request, response) {
+  try {
+    const consumers = await User.getAllConsumers();
+    if (!consumers || consumers.length === 0) {
+      return response.status(400).json({
+        success: false,
+        message: "No consumers found",
+      });
+    }
+    return response.status(200).json({
+      success: true,
+      consumers: consumers,
+    });
+  } catch (error) {
+    console.error(`Error while fetching consumers: ${error}`);
+    response.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error: error.message,
+    });
+  }
+}
+
+// logout controller
+export function logoutController(request, response) {
+  console.log("Logging out user...");
+  destroyTokenCookie(response);
+  response.status(200).json({
+    success: true,
+    message: "Logout successful",
+  });
+}
