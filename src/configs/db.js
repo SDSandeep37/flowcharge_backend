@@ -26,7 +26,7 @@ export async function initialiseDatabaseTable() {
       creator_id UUID REFERENCES users(id) ON DELETE CASCADE,
       name VARCHAR(100) NOT NULL,
       description TEXT,
-      base_url VARCHAR(255) NOT NULL,
+      base_url VARCHAR(255) UNIQUE NOT NULL,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );

@@ -62,6 +62,14 @@ export async function createApiController(request, response) {
       message: "Invalid Api base URL",
     });
   }
+  const existingApi = await Apis.getApiByBaseUrl(base_url);
+  if (existingApi) {
+    return response.status(409).json({
+      success: false,
+      message: "Api with this base URL already exists",
+    });
+  }
+
   try {
     const api = await Apis.createApi(
       owner_id,
@@ -77,6 +85,55 @@ export async function createApiController(request, response) {
     });
   } catch (error) {
     console.error("Create Api failed:", error);
+    return response.status(500).json({
+      success: false,
+      message: "Some went wrong. Please try again!",
+    });
+  }
+}
+
+// get all apis controller
+export async function getAllApisController(request, response) {
+  try {
+    const apis = await Apis.getAllApis();
+    return response.status(200).json({
+      success: true,
+      message: "Apis retrieved successfully",
+      apis: apis,
+    });
+  } catch (error) {
+    console.error("Get All Apis failed:", error);
+    return response.status(500).json({
+      success: false,
+      message: "Some went wrong. Please try again!",
+    });
+  }
+}
+
+//get api with it's base url
+export async function getApiWithBaseUrlController(request, response) {
+  const { base_url } = request.body;
+  if (!base_url) {
+    return response.status(400).json({
+      success: false,
+      message: "Api base URL is required",
+    });
+  }
+  try {
+    const api = await Apis.getApiByBaseUrl(base_url);
+    if (!api) {
+      return response.status(404).json({
+        success: false,
+        message: "Api not found",
+      });
+    }
+    return response.status(200).json({
+      success: true,
+      message: "Api retrieved successfully",
+      data: api,
+    });
+  } catch (error) {
+    console.error("Get Api by Base URL failed:", error);
     return response.status(500).json({
       success: false,
       message: "Some went wrong. Please try again!",
