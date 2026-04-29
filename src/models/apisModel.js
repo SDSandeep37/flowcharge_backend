@@ -70,3 +70,32 @@ export async function getAllApis() {
     throw error;
   }
 }
+// for a particular consumer
+export async function getAllApisUser(id_user) {
+  try {
+    const result = await pool.query(
+      `
+      SELECT apis.*, users.name as owner_name,apis_keys.user_id,apis_keys.api_key
+      FROM apis JOIN users
+      ON apis.owner_id =  users.id
+      LEFT JOIN apis_keys
+      ON apis.id =  apis_keys.api_id
+      AND apis_keys.user_id = $1
+     `,
+      [id_user],
+    );
+    const apis = result.rows;
+    apis.forEach((api) => {
+      delete api.created_at;
+      delete api.updated_at;
+      return {
+        ...api,
+        is_added: api.user_id ? true : false,
+      };
+    });
+
+    return apis;
+  } catch (error) {
+    throw error;
+  }
+}

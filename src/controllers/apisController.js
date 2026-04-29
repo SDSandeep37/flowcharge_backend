@@ -95,12 +95,22 @@ export async function createApiController(request, response) {
 // get all apis controller
 export async function getAllApisController(request, response) {
   try {
-    const apis = await Apis.getAllApis();
-    return response.status(200).json({
-      success: true,
-      message: "Apis retrieved successfully",
-      apis: apis,
-    });
+    const { userrole, user } = request.user;
+    if (userrole === "consumer") {
+      const apis = await Apis.getAllApisUser(user);
+      return response.status(200).json({
+        success: true,
+        message: "Apis retrieved successfully",
+        apis: apis,
+      });
+    } else {
+      const apis = await Apis.getAllApis();
+      return response.status(200).json({
+        success: true,
+        message: "Apis retrieved successfully",
+        apis: apis,
+      });
+    }
   } catch (error) {
     console.error("Get All Apis failed:", error);
     return response.status(500).json({

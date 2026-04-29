@@ -403,7 +403,6 @@ export async function getAllConsumersController(request, response) {
 
 // logout controller
 export function logoutController(request, response) {
-  console.log("Logging out user...");
   destroyTokenCookie(response);
   response.status(200).json({
     success: true,

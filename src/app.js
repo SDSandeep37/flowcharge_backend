@@ -3,6 +3,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import usersRoute from "./routes/usersRoute.js";
 import apisRoute from "./routes/apisRoute.js";
+import apikeysRoute from "./routes/apikeysRoute.js";
 
 const app = express();
 
@@ -28,4 +29,6 @@ app.use(cors(corsOptions));
 //
 app.use("/flowcharge/users", usersRoute);
 app.use("/flowcharge/apis", apisRoute);
+app.use("/flowcharge/apikeys", apikeysRoute);
+
 export default app;
