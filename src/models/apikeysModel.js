@@ -35,3 +35,19 @@ export async function getApiKeyByApiIdAndUserId(api_id, user_id) {
     throw error;
   }
 }
+//get api key details with api key
+export async function getDetailsByApiKey(api_key) {
+  try {
+    const result = await pool.query(
+      `
+      SELECT * FROM apis_keys
+      WHERE api_key = $1
+      `,
+      [api_key],
+    );
+    const apidetails = result.rows[0];
+    delete apidetails.created_at;
+    delete apidetails.updated_at;
+    return apidetails;
+  } catch (error) {}
+}

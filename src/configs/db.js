@@ -43,5 +43,15 @@ export async function initialiseDatabaseTable() {
       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
   `);
+  await pool.query(`
+      CREATE TABLE IF NOT EXISTS usage_logs (
+      id SERIAL PRIMARY KEY,
+      api_key_id UUID REFERENCES apis_keys(id) ON DELETE CASCADE,
+      request_point VARCHAR(255) NOT NULL,          
+      response_status INT,                     
+      latency_ms INT,                         
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+  `);
   console.log("Database Tables are Initialised");
 }

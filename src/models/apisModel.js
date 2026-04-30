@@ -99,3 +99,23 @@ export async function getAllApisUser(id_user) {
     throw error;
   }
 }
+
+// get apis with its id
+export async function getApiById(id) {
+  try {
+    const result = await pool.query(
+      `
+      SELECT * FROM apis WHERE id = $1
+     `,
+      [id],
+    );
+    const api = result.rows[0];
+    if (api) {
+      delete api.created_at;
+      delete api.updated_at;
+    }
+    return api;
+  } catch (error) {
+    throw error;
+  }
+}

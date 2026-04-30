@@ -37,3 +37,22 @@ export async function createApiKeyController(request, response) {
     });
   }
 }
+
+//get api key details by api key controller, this will get the api id and help in further processing of middleware
+export async function getApiDetailsByApiKeyController(api_key) {
+  try {
+    const keyDetails = await ApiKeys.getDetailsByApiKey(api_key);
+
+    if (!keyDetails) {
+      return false;
+    }
+    return keyDetails;
+  } catch (error) {
+    console.error("Error fetching api key details:", error);
+    response.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error: error.message,
+    });
+  }
+}

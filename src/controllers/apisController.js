@@ -150,3 +150,20 @@ export async function getApiWithBaseUrlController(request, response) {
     });
   }
 }
+
+//get api by id and get the base url for further process of middleware
+export async function getApiByIdController(id) {
+  try {
+    const result = await Apis.getApiById(id);
+    if (!result) {
+      return false;
+    }
+    return result.base_url;
+  } catch (error) {
+    console.error("Error while fetching api by it's ID ");
+    return response.status(500).json({
+      success: false,
+      message: "Some went wrong. Please try again!",
+    });
+  }
+}
