@@ -53,5 +53,20 @@ export async function initialiseDatabaseTable() {
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
   `);
+  await pool.query(`
+      CREATE TABLE IF NOT EXISTS billing (
+      id SERIAL PRIMARY KEY,
+      user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+      api_id UUID REFERENCES apis(id) ON DELETE CASCADE,
+      total_requests INT DEFAULT 0,
+      bill_amount DECIMAL(12,4) DEFAULT 0.00,
+      billing_period DATE NOT NULL,
+      status VARCHAR(20) CHECK (status IN ('pending','paid')) DEFAULT 'pending',
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+      CONSTRAINT unique_billing UNIQUE (user_id, api_id, billing_period)
+    );
+  `);
   console.log("Database Tables are Initialised");
 }

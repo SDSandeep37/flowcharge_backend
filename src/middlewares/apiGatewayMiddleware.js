@@ -1,5 +1,6 @@
 import { getApiDetailsByApiKeyController } from "../controllers/apikeysController.js";
 import { getApiByIdController } from "../controllers/apisController.js";
+import { createOrUpdateBillingController } from "../controllers/billingsController.js";
 import { createUsageLogController } from "../controllers/usageLogsController.js";
 
 export async function apiGateway(request, response, next) {
@@ -10,13 +11,7 @@ export async function apiGateway(request, response, next) {
       message: "Cannot process your request",
     });
   }
-  // if (!request.body) {
-  //   return response.status(400).json({
-  //     success: false,
-  //     message: "Api key is missing",
-  //   });
-  // }
-  // const { api_key } = request.body;
+
   const { flowcharge } = request.query;
   const api_key = flowcharge;
   if (!api_key) {
@@ -26,17 +21,21 @@ export async function apiGateway(request, response, next) {
     });
   }
   //getting api key id with the help of provided api key
-  const api_key_id_details = await getApiDetailsByApiKeyController(api_key);
-  if (!api_key_id_details) {
+  const api_key_details = await getApiDetailsByApiKeyController(api_key);
+  console.log(api_key_details);
+  if (!api_key_details) {
     return response.status(400).json({
       success: false,
       message: "Invalid or Expired API key",
     });
   }
-  const api_key_id = api_key_id_details.api_id;
-  const id = api_key_id_details.id;
+  const api_id = api_key_details.api_id;
+  // apis_keys table id associted with the api_id and api_key
+  const api_key_id = api_key_details.id;
+  const user_id = api_key_details.user_id;
   // getting base url with the extracted api key id
-  const base_url = await getApiByIdController(api_key_id);
+  const base_url = await getApiByIdController(api_id);
+
   if (!base_url) {
     return response.status(400).json({
       success: false,
@@ -57,11 +56,12 @@ export async function apiGateway(request, response, next) {
   // if error then save the status
   if (!responseFromGeustApi.ok) {
     const logResult = await createUsageLogController(
-      id,
+      api_key_id,
       completeUrl,
       status,
       latencyMs,
     );
+    const billings = await createOrUpdateBillingController(user_id, api_id);
     return response.status(200).json({
       success: true,
       gateway: {
@@ -74,11 +74,12 @@ export async function apiGateway(request, response, next) {
   }
 
   const logResult = await createUsageLogController(
-    id,
+    api_key_id,
     completeUrl,
     status,
     latencyMs,
   );
+  const billings = await createOrUpdateBillingController(user_id, api_id);
   const data = await responseFromGeustApi.json();
   return response.status(200).json({
     success: true,
