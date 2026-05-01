@@ -16,7 +16,7 @@ app.use(cookieParser());
 const allowedOrigins = [
   "http://localhost:5173",
   "https://flowcharge-backend.onrender.com",
-  "*",
+  "https://flowcharge.vercel.app",
 ];
 
 // const corsOptions = {
