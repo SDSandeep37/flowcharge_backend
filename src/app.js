@@ -13,7 +13,11 @@ const app = express();
 // middlewares
 app.use(express.json());
 app.use(cookieParser());
-const allowedOrigins = ["http://localhost:5173", "*"];
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://flowcharge-backend.onrender.com",
+  "*",
+];
 
 // const corsOptions = {
 //   origin: "*",
