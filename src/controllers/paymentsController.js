@@ -52,7 +52,7 @@ export const createCheckoutSession = async (request, response) => {
       ],
       metadata: {
         billing_id: bill.id,
-        user_id: user_id,
+        user_id: user,
       },
       success_url: `https://flowcharge.vercel.app/success`,
       cancel_url: `https://flowcharge.vercel.app/cancel`,
