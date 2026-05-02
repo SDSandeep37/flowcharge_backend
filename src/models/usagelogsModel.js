@@ -27,7 +27,7 @@ export async function createUsageLogs(
 // get usage log details with the help of api_id and user id
 export async function getUsageLogsByApiID(api_id, user_id) {
   try {
-    const query = `SELECT  apis.id as apiId,apis.name,apis_keys.status as staus_of_key, usage_logs.response_status,
+    const query = `SELECT  apis.id as apiId,apis.name,apis_keys.status as status_of_key, usage_logs.response_status,
       usage_logs.latency_ms,usage_logs.id FROM apis  
       JOIN apis_keys ON apis.id = apis_keys.api_id
       JOIN usage_logs ON apis_keys.id =  usage_logs.api_key_id

@@ -64,12 +64,36 @@ export async function initialiseDatabaseTable() {
       total_requests INT DEFAULT 0,
       bill_amount DECIMAL(12,4) DEFAULT 0.00,
       billing_period DATE NOT NULL,
-      status VARCHAR(20) CHECK (status IN ('pending','paid')) DEFAULT 'pending',
+      status VARCHAR(20) CHECK (status IN ('pending','paid')) DEFAULT 'pending',  
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
       CONSTRAINT unique_billing UNIQUE (user_id, api_id, billing_period)
     );
   `);
+  await pool.query(`
+      CREATE TABLE IF NOT EXISTS payments (
+    id SERIAL PRIMARY KEY,
+    
+    billing_id INT REFERENCES billing(id) ON DELETE CASCADE,
+    user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+
+    stripe_payment_intent_id TEXT UNIQUE,
+    stripe_session_id TEXT,
+
+    amount DECIMAL(12,4) NOT NULL,
+    currency VARCHAR(10) DEFAULT 'inr',
+
+    status VARCHAR(20) CHECK (
+      status IN ('pending','succeeded','failed','refunded')
+    ) DEFAULT 'pending',
+
+    payment_method VARCHAR(50),
+
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+  `);
+
   console.log("Database Tables are Initialised");
 }

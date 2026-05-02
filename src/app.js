@@ -7,9 +7,12 @@ import apikeysRoute from "./routes/apikeysRoute.js";
 import apiGatewayRoute from "./routes/apiGatewayRoute.js";
 import billingRoute from "./routes/billingRoute.js";
 import usageLogRoute from "./routes/usageLogRoute.js";
+import webhookRoute from "./routes/webhookRoute.js";
+import paymentRoute from "./routes/paymentRoute.js";
 
 const app = express();
 
+app.use("/flowcharge/webhook", webhookRoute);
 // middlewares
 app.use(express.json());
 app.use(cookieParser());
@@ -45,5 +48,6 @@ app.use("/flowcharge/apis", apisRoute);
 app.use("/flowcharge/apikeys", apikeysRoute);
 app.use("/flowcharge/billing", billingRoute);
 app.use("/flowcharge/logs", usageLogRoute);
+app.use("/flowcharge/payment", paymentRoute);
 app.use("/", apiGatewayRoute);
 export default app;
