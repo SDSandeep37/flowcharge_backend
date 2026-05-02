@@ -4,9 +4,9 @@ import { Pool } from "pg";
 
 export const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  // ssl: {
-  //   rejectUnauthorized: false, // Render requires SSL but doesn’t provide CA cert
-  // },
+  ssl: {
+    rejectUnauthorized: false, // Render requires SSL but doesn’t provide CA cert
+  },
 });
 
 // table creation if not exist
