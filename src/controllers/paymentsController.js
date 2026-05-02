@@ -36,7 +36,11 @@ export const createCheckoutSession = async (request, response) => {
       payment_method_types: ["card"],
       mode: "payment",
       customer_email: email,
+      // ✅ REQUIRED for India export compliance
+      billing_address_collection: "required",
 
+      // ✅ ensures customer object is created with name + address
+      customer_creation: "always",
       line_items: [
         {
           price_data: {
@@ -54,16 +58,7 @@ export const createCheckoutSession = async (request, response) => {
         billing_id: bill.id,
         user_id: user,
       },
-      shipping: {
-        name: username,
-        address: {
-          line1: "Nagri",
-          city: "Ranchi",
-          state: "Jharkhand",
-          postal_code: "835303",
-          country: "IN",
-        },
-      },
+
       success_url: `https://flowcharge.vercel.app/success`,
       cancel_url: `https://flowcharge.vercel.app/cancel`,
     });
