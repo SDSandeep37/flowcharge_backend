@@ -10,7 +10,7 @@ export const createCheckoutSession = async (request, response) => {
   }
   try {
     const { billingId } = request.body;
-    const { user, email } = request.user; //getting from jwt auth
+    const { user, email, username } = request.user; //getting from jwt auth
 
     //get bill details
     const bill = await Payments.getBillingByBillingId(billingId);
@@ -53,6 +53,16 @@ export const createCheckoutSession = async (request, response) => {
       metadata: {
         billing_id: bill.id,
         user_id: user,
+      },
+      shipping: {
+        name: username,
+        address: {
+          line1: "Nagri",
+          city: "Ranchi",
+          state: "Jharkhand",
+          postal_code: "835303",
+          country: "IN",
+        },
       },
       success_url: `https://flowcharge.vercel.app/success`,
       cancel_url: `https://flowcharge.vercel.app/cancel`,

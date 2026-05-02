@@ -66,7 +66,12 @@ export async function createUserController(request, response) {
 
     // generating json web token
     const token = jsonwebtoken.sign(
-      { user: user.id, email: user.email, userrole: user.role },
+      {
+        user: user.id,
+        email: user.email,
+        userrole: user.role,
+        username: user.name,
+      },
       process.env.JWT_SECRET,
       { expiresIn: process.env.JWT_EXPIRE || "1h" },
     );
@@ -149,7 +154,12 @@ export async function createAdmin(request, response) {
 
     // generating json web token
     const token = jsonwebtoken.sign(
-      { user: user.id, email: user.email, userrole: user.role },
+      {
+        user: user.id,
+        email: user.email,
+        userrole: user.role,
+        username: user.name,
+      },
       process.env.JWT_SECRET,
       { expiresIn: process.env.JWT_EXPIRE || "1h" },
     );
@@ -296,7 +306,12 @@ export async function loginController(request, response) {
     }
     // generating json web token
     const token = jsonwebtoken.sign(
-      { user: user.id, email: user.email, userrole: user.role },
+      {
+        user: user.id,
+        email: user.email,
+        userrole: user.role,
+        username: user.name,
+      },
       process.env.JWT_SECRET,
       { expiresIn: process.env.JWT_EXPIRE || "1h" },
     );
