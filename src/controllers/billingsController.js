@@ -2,7 +2,7 @@ import * as Billings from "../models/billingModel.js";
 
 export async function createOrUpdateBillingController(userId, apiId) {
   try {
-    const costPerRequest = 0.1; // price in rupees
+    const costPerRequest = 1; // price in rupees
 
     const result = await Billings.upsertBilling({
       userId,
